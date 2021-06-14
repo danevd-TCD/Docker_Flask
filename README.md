@@ -55,4 +55,14 @@ If, for example, you updated flaskFile.py to serve a new route, you must save yo
 * `docker-compose down` (assuming docker_flask_web was already running)
 * `docker-compose up --build -d` (rebuild to reflect changes)
 
+## Stepping into Docker shell
+You can step into your running Docker instance through a Docker-provided shell interface, allowing you to change or view files/folders as you so wish.
+To do so:
 
+1. Make sure your docker instance is running.
+2. Run `docker ps` and copy your container's ID
+3. Enter `docker exec -it <CONTAINER ID> sh`, which launches a shell in your docker instance
+4. Do whatever you want to do in your shell; e.g `pwd` to see your current directory (by default, `/var/www/apache-flask`); or change directories into your docker volume and tinker with files to observe how changes are reflected on your dev machines' volume directory (by default, run `cd /var/Flask_Persistent`).
+5. Exit the shell by inputting `CTRL+P` followed by `CTRL+Q`
+
+Note that while you can edit any files you so desire within a running docker instance via the shell, these changes will not persist upon restarting your instance; only changes carried out in the shared docker volume will persist upon restarting/rebuilding the project.
