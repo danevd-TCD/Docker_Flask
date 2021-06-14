@@ -5,7 +5,7 @@ services:
         ports:
             - "80:80"
         volumes:
-            - persistent-data:/var/Team10_App/
+            - persistent-data:/var/Flask_Persistent/
         restart: always
 volumes:
     persistent-data:
