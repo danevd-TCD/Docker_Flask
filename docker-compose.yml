@@ -1,7 +1,12 @@
-version: '2'
+version: '3.9'
 services:
     web:
         build: .
         ports:
-        - "80:80"
+            - "80:80"
+        volumes:
+            - persistent-data:/var/Team10_App/
         restart: always
+volumes:
+    persistent-data:
+        driver: local
