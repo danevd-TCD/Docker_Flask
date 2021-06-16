@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y apache2 \
 	python3 \
 	python3-dev \
 	python3-pip \
-	vim \
+	nano \
   && apt-get clean \
   && apt-get autoremove \
   && rm -rf /var/lib/apt/lists/*
@@ -24,10 +24,10 @@ RUN a2enmod rewrite
 RUN a2enmod ssl
 
 #copy wsgi file
-COPY ./apache-flask.wsgi /var/www/apache-flask/apache-flask.wsgi
+#COPY ./apache-flask.wsgi /var/www/apache-flask/apache-flask.wsgi
 
 #main flask file
-COPY ./flaskFile.py /var/www/apache-flask/flaskFile.py
+#COPY ./flaskFile.py /var/www/apache-flask/flaskFile.py
 COPY ./app /var/www/apache-flask/app/
 
 RUN a2dissite 000-default.conf
