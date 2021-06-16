@@ -16,8 +16,12 @@ COPY ./app/requirements.txt /var/www/apache-flask/app/requirements.txt
 RUN pip3 install -r /var/www/apache-flask/app/requirements.txt
 
 COPY ./apache-flask.conf /etc/apache2/sites-available/apache-flask.conf
+COPY ./apache-flask-ssl.conf /etc/apache2/sites-available/apache-flask-ssl.conf
 RUN a2ensite apache-flask
+RUN a2ensite apache-flask-ssl
 RUN a2enmod headers
+RUN a2enmod rewrite
+RUN a2enmod ssl
 
 #copy wsgi file
 COPY ./apache-flask.wsgi /var/www/apache-flask/apache-flask.wsgi
@@ -34,6 +38,7 @@ RUN ln -sf /proc/self/fd/1 /var/log/apache2/access.log && \
 	ln -sf /proc/self/fd/1 /var/log/apache2/error.log
 
 EXPOSE 80
+EXPOSE 443
 #working directory for docker
 WORKDIR /var/www/apache-flask
 

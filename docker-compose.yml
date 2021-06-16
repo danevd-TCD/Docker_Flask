@@ -4,6 +4,7 @@ services:
         build: .
         ports:
             - "80:80"
+            - "443:443"
         volumes:
             - persistent-data:/var/Flask_Persistent/
         restart: always
