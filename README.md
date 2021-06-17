@@ -4,22 +4,7 @@ A dockerised Flask/Apache instance complete with WSGI configuration, running Fla
 ## NOTE
 This is the **development environment** version of this project; that means it's intended for running on a developer's machine, with the intent of replicating the server environment docker as close as possible for easy deployment. If you're looking for the server instance, please look at the branch **main** in this repository; **main** and **dev_build** maintain feature parity, but the intricacies of replicating a HTTPS/SSL environment on a local environment necessitate some extra setup in the dev_build branch.
 
-## Default config/folder locations
-Note that modifying the folder locations provided in this repository may prove somewhat complex, as the same locations appear over several files due to the nature of configuring both Flask and Apache + mod_WSGI to serve files from a specified folder. 
 
-By default, the Flask file ( `flaskFile.py` ) will reside in `/var/Flask_Persistent/`
-
-The persistent docker volume accessible within the docker instance is located at `/var/Flask_Persistent/`, and by default Flask will look for a subfolder therein named `frontend` to serve static/template/etc. content.
-
-If, for any reason, these folder locations do not suit, you are free to refactor all mentions of the errant folder structure present in the following files:
-
-* `apache-flask.conf`
-* `apache-flask.wsgi`
-* `docker-compose.yml`
-* `Dockerfile`
-* `flaskFile.py`
-
-By default, the `requirements.txt` file used by Docker to install all required pip packages is located in the `/app` folder. Installing/removing a python package means rebuilding your docker instance.
 
 ## Getting started
 
@@ -31,7 +16,7 @@ Where the two environments differ is that our server instance, a UCD Virtual Mac
 In both cases, we are utilise persistent docker volumes that allow for live changes of the site content without rebuilding the docker container.
 
 ### What we'll be doing
-If on Windows, we'll need [Windows Subsystem for Linux 2](https://docs.microsoft.com/en-us/windows/wsl/install-win10). This effectively runs a Linux distro under Windows; Docker utilises this for our virtualisation, and it also lets us install an Ubuntu distro so that we can developer in a Linux environment from within Windows.
+If on Windows, we'll need [Windows Subsystem for Linux 2](https://docs.microsoft.com/en-us/windows/wsl/install-win10). This effectively runs a Linux distro under Windows; Docker utilises this for our virtualisation, and it also lets us install an Ubuntu distro so that we can develop in a Linux environment from within Windows.
 
 First, we'll clone this repository on our local machine so that we have all the files docker needs. Then we'll need to modify our hosts file so that requests to localhost and 127.0.0.1 are redirected to our fake SSL site name, "dev.local". This is necessary because our self-signed SSL cert is for this fake domain. 
 
@@ -64,15 +49,28 @@ You (probably) haven't placed anything for your application to actually *serve* 
 ## Files and folders
 By default, your docker instance will serve files and folders from its internal docker-container location, `/var/Flask_Persistent/frontend`; meaning that within your docker instance, Flask will look for files and folders within that directory. You can access this directory by stepping into Docker shell; or by accessing the underlying persistent volume folder location on the host machine.
 
+On Windows using WSL2, the default folder location for the persistent volume created by our docker compose file is 
+
+`\\wsl$\docker-desktop-data\version-pack-data\community\docker\volumes\docker_flask_persistent-data\_data`
+
 Note that you will most likely need to update Flask to, for example, serve different files for different routes, depending on your site structure/layout.
 
 As of a recent update, Flask and it's WSGI partner app are now stored in the persistent volume. We're now ready to actually add our Flask backend and served frontend files. We clone our frontend repository into the persistent folder (`......\docker\volumes\docker_flask_persistent-data\_data`), so that any changes we make to our frontend can both be read by Docker and pushed to Github.
 
+Enter the following git command in your git terminal to clone our frontend section to this folder, without creating a parent folder:
+
+`git clone git@github.com:Team10UCD/Frontend.git .` 
+
+Your persistent volume folder should now look like this:
+
 ![image](https://user-images.githubusercontent.com/59771183/122412121-38753880-cf7d-11eb-92c7-3cf3ca8f42e4.png)
 
-This allows for changing Flask/Python backend elements on the fly. After changing or adding any files (Python or otherwise), you **must touch or otherwise change the .wsgi file**; e.g `touch flaskFile.py`. This is because Apache will reload all served content when it detects a change to our .wsgi interface file; the touch command achieves this by updating the last-edited timestamp on the file, allowing our server to reflect changes without restarting the Flask server or rebuilding the docker instance.
+You'll probably have to restart your docker container now that we have files in the right location.
+With this setup, we can now change Flask/Python backend elements, as well as frontend files, on the fly. After changing or adding any files (Python or otherwise), you **must touch or otherwise change the .wsgi file**; e.g `touch flaskFile.py`, in the `flask` folder.
 
-If, for example, you modify an underlying Docker file (one of the core docker configs), you must save your changes, and then cd into the project root directory and run the following:
+This is because Apache will reload all served content when it detects a change to our .wsgi interface file; the touch command achieves this by updating the last-edited timestamp on the file, allowing our server to reflect changes without restarting the Flask server or rebuilding the docker instance. Please refrain from actually adding/removing content from the .wsgi file unless you're absolutely certain you know what you're doing.
+
+There are situations where rebuilding the docker container may be necessary. If, for example, you modify an underlying Docker file (one of the core docker configs), you must save your changes, and then cd into the project root directory and run the following:
 
 * `docker-compose down` (assuming docker_flask_web was already running)
 * `docker-compose up --build -d` (rebuild to reflect changes)
@@ -107,3 +105,24 @@ To do so:
 5. Exit the shell by inputting `CTRL+P` followed by `CTRL+Q`
 
 Note that while you can edit any files you so desire within a running docker instance via the shell, these changes will not persist upon restarting your instance; only changes carried out in the shared docker volume will persist upon restarting/rebuilding the project.
+
+## Default config/folder locations
+**N.B**: this section is more of a reference on file locations than a suggestion to go changing anything. Please don't change folder structures without consulting with the rest of the team; it *will* break something, somewhere.
+
+----
+
+Note that modifying the folder locations provided in this repository may prove somewhat complex, as the same locations appear over several files due to the nature of configuring both Flask and Apache + mod_WSGI to serve files from a specified folder. 
+
+By default, the Flask file ( `flaskFile.py` ) will reside in `/var/Flask_Persistent/`
+
+The persistent docker volume accessible within the docker instance is located at `/var/Flask_Persistent/`, and by default Flask will look for a subfolder therein named `frontend` to serve static/template/etc. content.
+
+If, for any reason, these folder locations do not suit, you are free to refactor all mentions of the errant folder structure present in the following files:
+
+* `apache-flask.conf`
+* `apache-flask.wsgi`
+* `docker-compose.yml`
+* `Dockerfile`
+* `flaskFile.py`
+
+By default, the `requirements.txt` file used by Docker to install all required pip packages is located in the `/app` folder. Installing/removing a python package means rebuilding your docker instance.
