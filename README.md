@@ -1,12 +1,9 @@
 # Docker_Flask - Production environment
 A dockerised Flask/Apache instance complete with WSGI configuration, running Flask 2.0 on Python 3. This readme is aimed towards those who may never have used Docker before, and so spells out steps/procedures some might fight elementary or obvious.
 
-Partially based on [carlostighe](https://github.com/carlostighe/apache-flask)'s repo, but updated for Python 3 and mod_WSGI use, this repository will get you up and running with a Flask instance running behind Apache, that serves files/folders/etc. from a persistent docker volume folder, allowing you to modify your sites' contents without having to rebuild your docker instance.
-
-However, changes to the Flask file `flaskFile.py` *will* require a docker rebuild; in other words, backend changes will require a (brief, potentially automatable) server (aka docker instance) restart, but frontend work is seperate and the latest frontend files placed in the relevant directories will be served immediately on change.
 
 ## NOTE
-This is the production environment version of this project; that means it's intended for deployment on a server that can/has been issued an SSL certificate by e.g LetsEncrypt. To facilitate local development, a parallel branch named **"dev_build"** is present in this repository; it maintains feature parity with this branch, but differs in setup to allow local development of HTTPS/SSL-based sites.
+This is the **production environment** version of this project; that means it's intended for deployment on a server that can/has been issued an SSL certificate by e.g LetsEncrypt. To facilitate local development, a parallel branch named **"dev_build"** is present in this repository; it maintains feature parity with this branch, but differs in setup to allow local development of HTTPS/SSL-based sites.
 
 ## Default config/folder locations
 Note that modifying the folder locations provided in this repository may prove somewhat complex, as the same locations appear over several files due to the nature of configuring both Flask and Apache + mod_WSGI to serve files from a specified folder. 
