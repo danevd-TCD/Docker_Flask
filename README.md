@@ -66,14 +66,21 @@ Your persistent volume folder should now look like this:
 ![image](https://user-images.githubusercontent.com/59771183/122412121-38753880-cf7d-11eb-92c7-3cf3ca8f42e4.png)
 
 You'll probably have to restart your docker container now that we have files in the right location.
-With this setup, we can now change Flask/Python backend elements, as well as frontend files, on the fly. After changing or adding any files (Python or otherwise), you **must touch or otherwise change the .wsgi file**; e.g `touch flaskFile.py`, in the `flask` folder.
+
+## .wsgi file changes and reloading content
+With this setup, we can now change Flask/Python backend elements, as well as frontend files, on the fly. After changing or adding any files (Python or otherwise), you **must touch or otherwise change the .wsgi file**; e.g `touch flaskFile.py`, in the `flask` folder. 
+
+For convenience, I've written two scripts, `---update.sh---` and `---update---.ps1`, for Linux and Windows respectively, that will touch the .wsgi file so that Apache reloads the changes. On Windows, right click and hit "Run with powershell" to execute the script.
 
 This is because Apache will reload all served content when it detects a change to our .wsgi interface file; the touch command achieves this by updating the last-edited timestamp on the file, allowing our server to reflect changes without restarting the Flask server or rebuilding the docker instance. Please refrain from actually adding/removing content from the .wsgi file unless you're absolutely certain you know what you're doing.
 
+## Rebuilding the docker container
 There are situations where rebuilding the docker container may be necessary. If, for example, you modify an underlying Docker file (one of the core docker configs), you must save your changes, and then cd into the project root directory and run the following:
 
 * `docker-compose down` (assuming docker_flask_web was already running)
 * `docker-compose up --build -d` (rebuild to reflect changes)
+
+Please let the team know if you're tinkering with the docker container files (`Dockerfile` and/or `docker-compose.yml`) as changes here can have unintended consequences across the development environment.
 
 ## Developing under Windows
 To make sure we don't introduce any Windows-specific issues when we're developing on a Windows-based machine, we'll be using VS Code with the remote development plugin, and a WSL2 distro like Ubuntu. In short, VS Code will actually host a server in our WSL2 Ubuntu distro, and we'll be remote-developing in a Linux environment from Windows, using VS Code as our editor.
