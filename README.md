@@ -82,7 +82,19 @@ To make sure we don't introduce any Windows-specific issues when we're developin
 
 This means that all of our e.g Python modules, or node packages, or file structures etc. will be developed and linted in a Linux environment. In short, developing our frontend files using VSCode through WSL2 means that we're developing our frontend in a Linux environment, without needing a VM.
 
-Please see [this guide](https://code.visualstudio.com/blogs/2019/09/03/wsl2) for setting up the remote development plugin in VS Code. Next time you start up VS Code, the bottom left of the program should have a green icon; you should then be able to click on it and select which WSL2 Distro you'd like to remote-develop with; select Ubuntu, and then you can use VSCode as normal to navigate to our persistent Docker frontend folder and edit our HTML/Python/JS/etc. files.
+Please see [this guide](https://code.visualstudio.com/blogs/2019/09/03/wsl2) for setting up the remote development plugin in VS Code. Next time you start up VS Code, the bottom left of the program should have a green icon; you should then be able to click on it and select which WSL2 Distro you'd like to remote-develop with; select Ubuntu, and then start/edit our files in a folder location within that WSL2 distro. This means that when we build our output, or use a built-in dev preview server ala vue, everything will be running under Linux. 
+
+## Why all this setup?
+To start a project in VSCode, we would select our Ubuntu distro in VS Code to initate a remote development session. We then navigate to our folder of choosing to start a project; `/home` is a good starting point. We make a new directory with `mkdir Vue` if, for example, starting a Vue.js project; then we proceed to develop the project under WSL2 through VSCode. This means that when Vue.js starts a dev server to show our work, it'll still open our desktop browser and reflect our changes as usual; but all of our changes and work will be done under Linux, for a Linux output.
+
+The big reason we go through all this effort, VSCode or not, is that by using this Linux-based setup, and with our docker dev server running in the background, **we'll be able to access localhost-based server backends just like our production environment has**.
+
+In other words, this lets us develop a Vue.js application with Vue's native development preview server, while still accessing Flask data and functionality from localhost/127.0.0.1. This means we can develop our frontend with full testing against a backend, and all of our frontend references to localhost will work as expected when pushed to our public server, as our pushed files will be looking at "localhost" on our production server.
+
+**Note**: Due to the pecularities of how Windows manages WSL distro install mounting, it is currently necessary to copy over any finalised files from our Ubuntu WSL2 location to our persistent docker volume location.
+For example:
+Starting a WSL2 Ubuntu Vue.js project in `\\wsl$\Ubuntu\home\Vue` , and building the project to `\\wsl$\Ubuntu\home\Vue\dist`, would necessitate copying the output from the dist folder to `\\wsl$\docker-desktop-data\version-pack-data\community\docker\volumes\docker_flask_persistent-data\_data`
+
 
 ## Stepping into Docker shell
 You can step into your running Docker instance through a Docker-provided shell interface, allowing you to change or view files/folders as you so wish.
