@@ -36,7 +36,10 @@ Then we'll build our docker container. This will create a folder on our machine 
 Having installed Docker and Docker Compose, follow these steps:
 
 1. Clone/download this repository into a folder of your choice.
-2. Modify your hosts file with the following: `127.0.0.1 dev.local`. This redirects all requests to 127.0.0.1 to "dev.local", our fake self-signed SSL cert site. On windows, the hosts file is located at `C:\Windows\System32\drivers\etc`.
+2. Change into the developer branch (the branch this readme is on, `dev_build`). If you're using a terminal that supports git bash, this command will do that:
+    
+    `git checkout dev_build`
+3. Modify your hosts file with the following: `127.0.0.1 dev.local`. This redirects all requests to 127.0.0.1 to "dev.local", our fake self-signed SSL cert site. On windows, the hosts file is located at `C:\Windows\System32\drivers\etc`.
 4. In the root directory (Docker_Flask, unless you've renamed the folder), run the following command:
    
    `docker-compose up --build -d`
