@@ -36,7 +36,7 @@ Then we'll build our docker container. This will create a folder on our machine 
 Having installed Docker and Docker Compose, follow these steps:
 
 1. Clone/download this repository into a folder of your choice.
-2. Modify your hosts file with the following: `127.0.0.1 dev.local`. This redirects all requests to 127.0.0.1 to "dev.local", our fake self-signed SSL cert site.
+2. Modify your hosts file with the following: `127.0.0.1 dev.local`. This redirects all requests to 127.0.0.1 to "dev.local", our fake self-signed SSL cert site. On windows, the hosts file is located at `C:\Windows\System32\drivers\etc`.
 4. In the root directory (Docker_Flask, unless you've renamed the folder), run the following command:
    
    `docker-compose up --build -d`
@@ -45,6 +45,10 @@ Having installed Docker and Docker Compose, follow these steps:
 5. To restart your docker compose file, make sure you're in the root directory and enter `docker-compose up --build -d`. The --build parameter tells Docker Compose to rebuild our docker instance; Docker has good file change detection and file caching, and as such the --build command should almost never force a full redownload/rebuild of our project, instead only updating the relevant stage(s) of the build process.
 
 You (probably) haven't placed anything for your application to actually *serve* in response to any requests yet, which is where the next section of this guide comes into play.
+
+Here's what your hosts file should look like after step 2 of above:
+![image](https://user-images.githubusercontent.com/59771183/122469499-f0720800-cfb4-11eb-8304-397207f2db66.png)
+
 
 ## Files and folders
 By default, your docker instance will serve files and folders from its internal docker-container location, `/var/Flask_Persistent/frontend`; meaning that within your docker instance, Flask will look for files and folders within that directory. You can access this directory by stepping into Docker shell; or by accessing the underlying persistent volume folder location on the host machine.
