@@ -53,10 +53,6 @@ On Windows using WSL2, the default folder location for the persistent volume cre
 
 `\\wsl$\docker-desktop-data\version-pack-data\community\docker\volumes\docker_flask_persistent-data\_data`
 
-Note that you will most likely need to update Flask to, for example, serve different files for different routes, depending on your site structure/layout.
-
-As of a recent update, Flask and it's WSGI partner app are now stored in the persistent volume. We're now ready to actually add our Flask backend and served frontend files. We clone our frontend repository into the persistent folder (`......\docker\volumes\docker_flask_persistent-data\_data`), so that any changes we make to our frontend can both be read by Docker and pushed to Github.
-
 Enter the following git command in your git terminal to clone our frontend section to this folder, without creating a parent folder:
 
 `git clone git@github.com:Team10UCD/Frontend.git .` 
@@ -67,12 +63,27 @@ Your persistent volume folder should now look like this:
 
 You'll probably have to restart your docker container now that we have files in the right location.
 
-## .wsgi file changes and reloading content
+### Flask and python files
+Note that you will most likely need to update Flask to, for example, serve different files for different routes, depending on your site structure/layout. Currently, the site runs from a single python file, `flaskFile.py` located in the `flask` folder in the persistent docker volume.
+
+As of a recent update, Flask and it's WSGI partner app are now stored in the persistent volume. We're now ready to actually add our Flask backend and served frontend files. We clone our frontend repository into the persistent folder (`......\docker\volumes\docker_flask_persistent-data\_data`), so that any changes we make to our frontend can both be read by Docker and pushed to Github.
+
+### .wsgi file changes and reloading content
 With this setup, we can now change Flask/Python backend elements, as well as frontend files, on the fly. After changing or adding any files (Python or otherwise), you **must touch or otherwise change the .wsgi file**; e.g `touch flaskFile.py`, in the `flask` folder. 
 
 For convenience, I've written two scripts, `---update.sh---` and `---update---.ps1`, for Linux and Windows respectively, that will touch the .wsgi file so that Apache reloads the changes. On Windows, right click and hit "Run with powershell" to execute the script.
 
+![wsgi](https://user-images.githubusercontent.com/59771183/122430724-bd674e80-cf8b-11eb-9e0a-1de0b5d7753b.PNG)
+
+
 This is because Apache will reload all served content when it detects a change to our .wsgi interface file; the touch command achieves this by updating the last-edited timestamp on the file, allowing our server to reflect changes without restarting the Flask server or rebuilding the docker instance. Please refrain from actually adding/removing content from the .wsgi file unless you're absolutely certain you know what you're doing.
+
+### Frontend files
+All our frontend files served by Flask are located in the `frontend` folder in our persistent volume. The layout of this folder is very flexible and far from hard-coded; as we define what routes and files/folders Flask can serve without its' Python file, we can structure the frontend folder as necessary. Presently, it represents the layout of a dist build from Vue.js.
+
+### SSL files
+To self-host a HTTPS/SSL environment, we are having Apache use a self-signed SSL cert located in the SSL folder. Don't touch these files please.
+
 
 ## Rebuilding the docker container
 There are situations where rebuilding the docker container may be necessary. If, for example, you modify an underlying Docker file (one of the core docker configs), you must save your changes, and then cd into the project root directory and run the following:
