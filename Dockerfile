@@ -7,9 +7,12 @@ RUN apt-get update && apt-get install -y apache2 \
 	python3-dev \
 	python3-pip \
 	nano \
+	snapd \
   && apt-get clean \
   && apt-get autoremove \
   && rm -rf /var/lib/apt/lists/*
+
+RUN snap install core
 
 #copy app requirements to the /var folder docker will use to store files
 COPY ./app/requirements.txt /var/www/apache-flask/app/requirements.txt
@@ -42,5 +45,8 @@ EXPOSE 443
 #working directory for docker
 WORKDIR /var/www/apache-flask
 
-
 CMD /usr/sbin/apache2ctl -D FOREGROUND
+
+#cerbot
+RUN sudo snap install --classic certbot
+RUN sudo cerbot --apache --agree-tos -q --staging -d csi6220-4-vm1.ucd.ie --no-autorenew -m daniel.danev@ucdconnect.ie
