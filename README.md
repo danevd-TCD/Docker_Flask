@@ -54,7 +54,7 @@ Here's what your hosts file should look like after step 2 of above:
 
 
 ## Files and folders
-By default, your docker instance will serve files and folders from its internal docker-container location, `/var/Flask_Persistent/frontend`; meaning that within your docker instance, Flask will look for files and folders within that directory. You can access this directory by stepping into Docker shell; or by accessing the underlying persistent volume folder location on the host machine.
+By default, your docker instance will serve files and folders from its internal docker-container location, `/var/Danev_Persistent_/frontend`; meaning that within your docker instance, Flask will look for files and folders within that directory. You can access this directory by stepping into Docker shell; or by accessing the underlying persistent volume folder location on the host machine.
 
 On Windows using WSL2, the default folder location for the persistent volume created by our docker compose file is 
 
@@ -126,7 +126,7 @@ To do so:
 1. Make sure your docker instance is running.
 2. Run `docker ps` and copy your container's ID
 3. Enter `docker exec -it <CONTAINER ID> sh`, which launches a shell in your docker instance
-4. Do whatever you want to do in your shell; e.g `pwd` to see your current directory (by default, `/var/www/apache-flask`); or change directories into your docker volume and tinker with files to observe how changes are reflected on your dev machines' volume directory (by default, run `cd /var/Flask_Persistent`).
+4. Do whatever you want to do in your shell; e.g `pwd` to see your current directory (by default, `/var/www/apache-flask`); or change directories into your docker volume and tinker with files to observe how changes are reflected on your dev machines' volume directory (by default, run `cd /var/Danev_Persistent_`).
 5. Exit the shell by inputting `CTRL+P` followed by `CTRL+Q`
 
 Note that while you can edit any files you so desire within a running docker instance via the shell, these changes will not persist upon restarting your instance; only changes carried out in the shared docker volume will persist upon restarting/rebuilding the project.
@@ -138,9 +138,9 @@ Note that while you can edit any files you so desire within a running docker ins
 
 Note that modifying the folder locations provided in this repository may prove somewhat complex, as the same locations appear over several files due to the nature of configuring both Flask and Apache + mod_WSGI to serve files from a specified folder. 
 
-By default, the Flask file ( `flaskFile.py` ) will reside in `/var/Flask_Persistent/`
+By default, the Flask file ( `flaskFile.py` ) will reside in `/var/Danev_Persistent_/`
 
-The persistent docker volume accessible within the docker instance is located at `/var/Flask_Persistent/`, and by default Flask will look for a subfolder therein named `frontend` to serve static/template/etc. content.
+The persistent docker volume accessible within the docker instance is located at `/var/Danev_Persistent_/`, and by default Flask will look for a subfolder therein named `frontend` to serve static/template/etc. content.
 
 If, for any reason, these folder locations do not suit, you are free to refactor all mentions of the errant folder structure present in the following files:
 
