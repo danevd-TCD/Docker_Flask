@@ -6,7 +6,7 @@ services:
             - "80:80"
             - "443:443"
         volumes:
-            - persistent-data:/var/Flask_Persistent/
+            - persistent-data:/var/Danev_Persistent_/
         restart: always
 volumes:
     persistent-data:
