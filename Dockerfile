@@ -7,19 +7,24 @@ RUN apt-get update && apt-get install -y apache2 \
 	python3-dev \
 	python3-pip \
 	nano \
-	snapd \
   && apt-get clean \
   && apt-get autoremove \
   && rm -rf /var/lib/apt/lists/*
 
-RUN snap install core
+#certbot python-based install
+RUN apt update
+RUN apt install -y python3 python3-venv libaugeas0
+RUN python3 -m venv /opt/certbot/
+RUN /opt/certbot/bin/pip install --upgrade pip
+RUN /opt/certbot/bin/pip install certbot certbot-apache
+RUN ln -s /opt/certbot/bin/certbot /usr/bin/certbot
 
 #copy app requirements to the /var folder docker will use to store files
 COPY ./app/requirements.txt /var/www/apache-flask/app/requirements.txt
 RUN pip3 install -r /var/www/apache-flask/app/requirements.txt
 
 COPY ./apache-flask.conf /etc/apache2/sites-available/apache-flask.conf
-COPY ./apache-flask-ssl.conf /etc/apache2/sites-available/apache-flask-ssl.conf
+#COPY ./apache-flask-ssl.conf /etc/apache2/sites-available/apache-flask-ssl.conf
 #RUN a2ensite apache-flask
 #RUN a2ensite apache-flask-ssl
 RUN a2enmod headers
@@ -45,8 +50,12 @@ EXPOSE 443
 #working directory for docker
 WORKDIR /var/www/apache-flask
 
-CMD /usr/sbin/apache2ctl -D FOREGROUND
+#CMD /usr/sbin/apache2ctl -D FOREGROUND ; sleep 5 ;certbot --apache --agree-tos --staging -q -d csi6220-4-vm1.ucd.ie --no-autorenew -m daniel.danev@ucdconnect.ie
 
-#cerbot
-RUN sudo snap install --classic certbot
-RUN sudo cerbot --apache --agree-tos -q --staging -d csi6220-4-vm1.ucd.ie --no-autorenew -m daniel.danev@ucdconnect.ie
+ADD start.sh /
+RUN chmod +x /start.sh
+CMD ["/start.sh"]
+
+#certbot python-based run
+#RUN sleep 10
+#RUN certbot --apache --agree-tos --staging -q -d csi6220-4-vm1.ucd.ie --no-autorenew -m daniel.danev@ucdconnect.ie
