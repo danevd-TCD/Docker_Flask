@@ -1,6 +1,7 @@
 # Docker_Flask - Production environment
 A dockerised Flask/Apache instance complete with WSGI configuration, running Flask 2.0 on Python 3. This readme is aimed towards those who may never have used Docker before, and so spells out steps/procedures some might fight elementary or obvious.
 
+This is a personal undertaking that I've also applied to my summer research practicum module in UCD; hence the fork and pull requests.
 
 ## NOTE
 This is the **production environment** version of this project; that means it's intended for deployment on a server that can/has been issued an SSL certificate by e.g LetsEncrypt. To facilitate local development, a parallel branch named **"dev_build"** is present in this repository; it maintains feature parity with this branch, but differs in setup to allow local development of HTTPS/SSL-based sites.
