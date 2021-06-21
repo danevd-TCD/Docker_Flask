@@ -6,8 +6,8 @@ services:
             - "80:80"
             - "443:443"
         volumes:
-            - persistent-data:/var/Danev_Persistent_/
-        restart: always
+            - persistent-data:/var/Danev_Persistent/
+        #restart: always
 volumes:
     persistent-data:
         driver: local
