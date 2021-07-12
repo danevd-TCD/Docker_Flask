@@ -33,6 +33,7 @@ COPY ./apache-flask.conf /etc/apache2/sites-available/apache-flask.conf
 RUN a2enmod headers
 RUN a2enmod rewrite
 RUN a2enmod ssl
+RUN a2enmod deflate
 
 #copy wsgi file
 #COPY ./apache-flask.wsgi /var/www/apache-flask/apache-flask.wsgi
