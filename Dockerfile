@@ -35,6 +35,8 @@ RUN a2enmod rewrite
 RUN a2enmod ssl
 RUN a2enmod deflate
 
+COPY ./deflate.conf /etc/apache2/mods-enabled
+
 #copy wsgi file
 #COPY ./apache-flask.wsgi /var/www/apache-flask/apache-flask.wsgi
 
