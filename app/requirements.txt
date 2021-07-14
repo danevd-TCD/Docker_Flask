@@ -2,3 +2,7 @@ Flask == 2.0.0
 SQLAlchemy
 Flask-Login
 pyodbc
+pandas
+Flask-SQLAlchemy
+matplotlib
+requests
