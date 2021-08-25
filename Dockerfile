@@ -66,9 +66,11 @@ WORKDIR /var/www/apache-flask
 
 #CMD /usr/sbin/apache2ctl -D FOREGROUND ; sleep 5 ;certbot --apache --agree-tos --staging -q -d csi6220-4-vm1.ucd.ie --no-autorenew -m daniel.danev@ucdconnect.ie
 
-ADD start.sh /
-RUN chmod +x /start.sh
-CMD ["/start.sh"]
+#ADD start.sh /
+#RUN chmod +x /start.sh
+#CMD ["/start.sh"]
+
+CMD /usr/sbin/apache2ctl -D FOREGROUND && certbot --apache --non-interactive --staging --quiet --agree-tos -d danev.xyz -d www.danev.xyz -m danevd@tcd.ie --no-eff-email
 
 #certbot python-based run
 #RUN sleep 10
