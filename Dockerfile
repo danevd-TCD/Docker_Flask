@@ -6,7 +6,10 @@ RUN apt-get update && apt-get install -y apache2 \
 	python3 \
 	python3-dev \
 	python3-pip \
+	g++ \
+	unixodbc-dev \
 	nano \
+	curl \
   && apt-get clean \
   && apt-get autoremove \
   && rm -rf /var/lib/apt/lists/*
@@ -32,6 +35,8 @@ RUN a2enmod rewrite
 RUN a2enmod ssl
 RUN a2enmod deflate
 
+COPY ./deflate.conf /etc/apache2/mods-enabled
+
 #copy wsgi file
 #COPY ./apache-flask.wsgi /var/www/apache-flask/apache-flask.wsgi
 
@@ -49,6 +54,14 @@ RUN ln -sf /proc/self/fd/1 /var/log/apache2/access.log && \
 EXPOSE 80
 EXPOSE 443
 #working directory for docker
+
+#install MS SQL ODBC driver:
+RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
+RUN curl https://packages.microsoft.com/config/debian/10/prod.list > /etc/apt/sources.list.d/mssql-release.list
+RUN apt-get update
+RUN ACCEPT_EULA=Y apt-get install -y msodbcsql17
+
+
 WORKDIR /var/www/apache-flask
 
 #CMD /usr/sbin/apache2ctl -D FOREGROUND ; sleep 5 ;certbot --apache --agree-tos --staging -q -d csi6220-4-vm1.ucd.ie --no-autorenew -m daniel.danev@ucdconnect.ie
